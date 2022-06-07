@@ -9,7 +9,7 @@ namespace TestTask
 		filesystem::path userPath = filesystem::path(name);
 		cout << "Trying to open the file in readonly mode\n";
 
-		list<File*>::iterator it = find_if(begin(activeFiles), end(activeFiles), 
+		list<File*>::iterator it = find_if(begin(activeFiles), end(activeFiles),
 			[userPath](const File* file) { return !file->path.compare(userPath); });
 
 		if (it == end(activeFiles))	// такого открытого файла не найдено
@@ -20,28 +20,7 @@ namespace TestTask
 			if (file->is.is_open())
 			{
 				activeFiles.push_back(file);
-
-				file->is.seekg(0, file->is.end);
-				file->length = file->is.tellg();
-				file->is.seekg(0, file->is.beg);
-				file->buffer = new char[file->length];
-				cout << "Reading " << file->length << " characters...\n";
-
-				for (const auto& f : activeFiles)	// DEBUGGING
-				{
-					cout << f->path << endl;
-					cout << f->isReadOnly << endl;
-				}
-
-				if (file->is.read(file->buffer, file->length))
-				{
-					cout << "All characters read successfully\n";
-					return file;
-				}
-				else
-				{
-					cout << "Error: Only " << file->is.gcount() << " could be read\n";
-				}
+				return file;
 			}
 
 			Close(file);
@@ -59,9 +38,11 @@ namespace TestTask
 	{
 		if (f)
 		{
+
 			f->is.close();
 			f->os.close();
 			delete f;
+			activeFiles.remove(f);
 		}
 	}
 
@@ -70,12 +51,19 @@ namespace TestTask
 		filesystem::path userPath = filesystem::path(name);
 		cout << "Trying to open or create the file in writeonly mode\n";
 
-		list<File*>::iterator file = find_if(begin(activeFiles), end(activeFiles),
+		list<File*>::iterator it = find_if(begin(activeFiles), end(activeFiles),
 			[userPath](const File* file) { return !file->path.compare(userPath); });
 
-		if (file != end(activeFiles))	// нашли открытый файл
+		if (it != end(activeFiles))	// нашли открытый файл
 		{
-
+			if ((*it)->isReadOnly)
+			{
+				return *it;
+			}
+			else
+			{
+				cout << "File is already opened in readonly mode\n";
+			}
 		}
 		else
 		{
@@ -106,6 +94,36 @@ namespace TestTask
 
 	size_t VFS::Read(File* f, char* buff, size_t len)
 	{
+		if (f)
+		{
+			if (f->isReadOnly)
+			{
+				f->is.seekg(0, f->is.end);
+				len = f->is.tellg();
+				f->is.seekg(0, f->is.beg);
+				buff = new char[len];
+				cout << "Reading " << len << " characters...\n";
+
+				if (f->is.read(buff, len))	// прочитать определенное количество?
+				{
+					cout << "All characters read successfully\n";
+				}
+				else
+				{
+					cout << "ERROR: Only " << f->is.gcount() << " could be read\n";
+				}
+				return f->is.gcount();
+			}
+			else
+			{
+				cout << "File is in writeonly mode\n";
+			}
+		}
+		else
+		{
+			cout << "ERROR: File can not be opened\n";
+		}
+
 		return 0;
 	}
 

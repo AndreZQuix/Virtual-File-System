@@ -7,19 +7,12 @@ namespace TestTask
 {
 	struct File
 	{
-		char* buffer;
-		size_t length;
 		bool isReadOnly;
 		std::ifstream is;
 		std::ofstream os;
 		std::filesystem::path path;
 
-		File(const bool isReadOnly) : buffer(nullptr), length(0), isReadOnly(isReadOnly), is(std::ifstream()), os(std::ofstream()), path(std::filesystem::path()) {};
-
-		~File()
-		{
-			delete[] buffer;
-		}
+		File(const bool isReadOnly) : isReadOnly(isReadOnly), is(std::ifstream()), os(std::ofstream()), path(std::filesystem::path()) {};
 	};
 
 	struct IVFS
@@ -30,6 +23,6 @@ namespace TestTask
 		virtual size_t Write(File* f, char* buff, size_t len) = 0; // Записать данные в файл. Возвращаемое значение - сколько реально байт удалось записать
 		virtual void Close(File* f) = 0; // Закрыть файл
 
-		virtual ~IVFS() {};
+		virtual ~IVFS() = default;
 	};
 }
