@@ -8,12 +8,11 @@ namespace TestTask
 		char* buffer;
 		size_t length;
 		bool isReadOnly;
-		bool isOpened;
 		std::ifstream is;
 		std::ofstream os;
 		char path[256];
 
-		File(const bool isReadOnly) : buffer(nullptr), length(0), isReadOnly(isReadOnly), isOpened(false), is(std::ifstream()), os(std::ofstream()), path("") {};
+		File(const bool isReadOnly) : buffer(nullptr), length(0), isReadOnly(isReadOnly), is(std::ifstream()), os(std::ofstream()), path("") {};
 
 		~File()
 		{

@@ -6,7 +6,7 @@ namespace TestTask
 {
 	class VFS : public IVFS
 	{
-		std::list<File*> files;
+		std::list<File*> activeFiles;
 
 	public:
 		File* Open(const char* name);
