@@ -1,19 +1,21 @@
 ﻿#include "VFS.h"
-#include <iostream>
+
+using namespace std;
 
 namespace TestTask
 {
 	File* VFS::Open(const char* name)
 	{
-		std::cout << "Trying to open the file in readonly mode\n";
+		filesystem::path userPath = filesystem::path(name);
+		cout << "Trying to open the file in readonly mode\n";
 
-		std::list<File*>::iterator it = std::find_if(begin(activeFiles), end(activeFiles), 
-			[name](const File* file) { return !(strcmp(file->path, name)); });
+		list<File*>::iterator it = find_if(begin(activeFiles), end(activeFiles), 
+			[userPath](const File* file) { return !file->path.compare(userPath); });
 
 		if (it == end(activeFiles))	// такого открытого файла не найдено
 		{
 			File* file = new File(true);
-			file->is.open(name, std::ifstream::binary | std::ifstream::in);
+			file->is.open(name, ifstream::binary | ifstream::in);
 
 			if (file->is.is_open())
 			{
@@ -23,22 +25,22 @@ namespace TestTask
 				file->length = file->is.tellg();
 				file->is.seekg(0, file->is.beg);
 				file->buffer = new char[file->length];
-				std::cout << "Reading " << file->length << " characters...\n";
+				cout << "Reading " << file->length << " characters...\n";
 
 				for (const auto& f : activeFiles)	// DEBUGGING
 				{
-					std::cout << f->path << std::endl;
-					std::cout << f->isReadOnly << std::endl;
+					cout << f->path << endl;
+					cout << f->isReadOnly << endl;
 				}
 
 				if (file->is.read(file->buffer, file->length))
 				{
-					std::cout << "All characters read successfully\n";
+					cout << "All characters read successfully\n";
 					return file;
 				}
 				else
 				{
-					std::cout << "Error: Only " << file->is.gcount() << " could be read\n";
+					cout << "Error: Only " << file->is.gcount() << " could be read\n";
 				}
 			}
 
@@ -49,7 +51,7 @@ namespace TestTask
 			return *it;
 		}
 
-		std::cout << "Can not open the file in readonly mode\n";
+		cout << "Can not open the file in readonly mode\n";
 		return nullptr;
 	}
 
@@ -65,31 +67,40 @@ namespace TestTask
 
 	File* VFS::Create(const char* name)
 	{
-		std::cout << "Trying to open or create the file in writeonly mode\n";
+		filesystem::path userPath = filesystem::path(name);
+		cout << "Trying to open or create the file in writeonly mode\n";
 
-		std::list<File*>::iterator file = std::find_if(begin(activeFiles), end(activeFiles),
-			[name](const File* file) { return !strcmp(file->path, name); });
+		list<File*>::iterator file = find_if(begin(activeFiles), end(activeFiles),
+			[userPath](const File* file) { return !file->path.compare(userPath); });
 
-		if (file != end(activeFiles))	// нашли файл
+		if (file != end(activeFiles))	// нашли открытый файл
 		{
-			// не должен быть открыт. Если файл уже открыт, его надо обрабатывать
+
 		}
 		else
 		{
+			try
+			{
+				filesystem::create_directories(userPath.parent_path());
+			}
+			catch (exception& e)
+			{
+				cout << e.what() << endl;
+			}
+
 			File* file = new File(false);
-			file->os.open(name, std::ofstream::out);
+			file->os.open(userPath, ofstream::out);
 			if (file->os.is_open())
 			{
-				std::cout << "File has been created in writeonly mode\n";
-				strcpy_s(file->path, name);
+				cout << "File has been created in writeonly mode\n";
+				file->path = userPath;
 				activeFiles.push_back(file);
 				return file;
 			}
 			Close(file);
-			delete file;
 		}
 
-		std::cout << "Can not open or create the file in writeonly mode\n";
+		cout << "Can not open or create the file in writeonly mode\n";
 		return nullptr;
 	}
 

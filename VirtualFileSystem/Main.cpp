@@ -19,5 +19,7 @@ int main()
 
     std::cout << "\nClosing first file..." << std::endl;
     VFS->Close(firstFile);
+
+    delete VFS;
 }
 

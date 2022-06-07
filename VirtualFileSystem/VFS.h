@@ -14,6 +14,17 @@ namespace TestTask
 		size_t Read(File* f, char* buff, size_t len);
 		size_t Write(File* f, char* buff, size_t len);
 		void Close(File* f);
+
+		~VFS()
+		{
+			while (!activeFiles.empty())
+			{
+				delete activeFiles.front();
+				activeFiles.pop_front();
+			}
+
+			std::cout << "Object has been destroyed" << std::endl;
+		}
 	};
 }
 

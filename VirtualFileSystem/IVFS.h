@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include <fstream>
+#include <iostream>
+#include <filesystem>
 
 namespace TestTask
 {
@@ -10,9 +12,9 @@ namespace TestTask
 		bool isReadOnly;
 		std::ifstream is;
 		std::ofstream os;
-		char path[256];
+		std::filesystem::path path;
 
-		File(const bool isReadOnly) : buffer(nullptr), length(0), isReadOnly(isReadOnly), is(std::ifstream()), os(std::ofstream()), path("") {};
+		File(const bool isReadOnly) : buffer(nullptr), length(0), isReadOnly(isReadOnly), is(std::ifstream()), os(std::ofstream()), path(std::filesystem::path()) {};
 
 		~File()
 		{
@@ -27,5 +29,7 @@ namespace TestTask
 		virtual size_t Read(File* f, char* buff, size_t len) = 0; // Прочитать данные из файла. Возвращаемое значение - сколько реально байт удалось прочитать
 		virtual size_t Write(File* f, char* buff, size_t len) = 0; // Записать данные в файл. Возвращаемое значение - сколько реально байт удалось записать
 		virtual void Close(File* f) = 0; // Закрыть файл
+
+		virtual ~IVFS() {};
 	};
 }
