@@ -8,8 +8,6 @@ int main()
 
     TestTask::IVFS* VFS = new TestTask::VFS();      // тестирование
 
-    /*std::string path("G:/VS/VirtualFileSystem/Test.txt");*/
-
     std::cout << "\nOpening first file..." << std::endl;
     TestTask::File* firstFile = VFS->Open("G:/VS/VirtualFileSystem/Test.txt");
 

@@ -105,15 +105,15 @@ namespace TestTask
 		{
 			if (f->isReadOnly)
 			{
-				cout << "Reading " << len << " characters...\n";
+				cout << "Reading " << len << " bytes...\n";
 
 				if (f->is.read(buff, len))
 				{
-					cout << "All characters were read successfully\n";
+					cout << "All bytes were read successfully\n";
 				}
 				else
 				{
-					cout << "ERROR: Only " << f->is.gcount() << " could be read\n";
+					cout << "ERROR: Only " << f->is.gcount() << " bytes could be read\n";
 				}
 				return f->is.gcount();
 			}
@@ -135,18 +135,18 @@ namespace TestTask
 		{
 			if (!f->isReadOnly)
 			{
-				cout << "Writing " << len << " characters...\n";
+				cout << "Writing " << len << " bytes...\n";
 				size_t bufferSize = filesystem::file_size(f->path);
 
 				if (f->os.write(buff, len))
 				{
-					cout << "All characters were read successfully\n";
+					cout << "All bytes were read successfully\n";
 					return len;
 				}
 				else
 				{
 					bufferSize = filesystem::file_size(f->path) - bufferSize;	// насколько увеличился вес файла
-					cout << "ERROR: Only " << bufferSize << " could be read\n";
+					cout << "ERROR: Only " << bufferSize << " bytes could be read\n";
 					return bufferSize;
 				}
 			}

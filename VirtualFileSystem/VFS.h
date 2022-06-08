@@ -22,8 +22,6 @@ namespace TestTask
 				delete activeFiles.front();
 				activeFiles.pop_front();
 			}
-
-			std::cout << "\nObject has been destroyed" << std::endl;
 		}
 	};
 }
