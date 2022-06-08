@@ -6,7 +6,7 @@ namespace TestTask
 {
 	class VFS : public IVFS
 	{
-		std::list<File*> activeFiles;
+		std::list<File*> activeFiles;	// кэш открытых файлов
 
 	public:
 		File* Open(const char* name) override;
@@ -23,7 +23,7 @@ namespace TestTask
 				activeFiles.pop_front();
 			}
 
-			std::cout << "Object has been destroyed" << std::endl;
+			std::cout << "\nObject has been destroyed" << std::endl;
 		}
 	};
 }

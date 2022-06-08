@@ -3,7 +3,7 @@
 
 int main()
 {
-    TestTask::VFS* VFS = new TestTask::VFS();
+    TestTask::IVFS* VFS = new TestTask::VFS();
 
     std::string path("G:/VS/VirtualFileSystem/Test.txt");
 
@@ -29,8 +29,11 @@ int main()
     firstFile = VFS->Open(path.c_str());
     
     std::cout << "\nReading first file again..." << std::endl;
-    char* buff = nullptr;
-    std::cout << "\nBits read: " << VFS->Read(firstFile, buff, 0);
+    size_t len = 256;
+    char* buff = new char[len];
+    std::cout << "\nBits read: " << VFS->Read(firstFile, buff, len);
+    std::cout << buff;
+
     delete[] buff;
 
     delete VFS;
