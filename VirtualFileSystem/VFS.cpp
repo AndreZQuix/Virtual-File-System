@@ -12,7 +12,7 @@ namespace TestTask
 		list<File*>::iterator it = find_if(begin(activeFiles), end(activeFiles),
 			[userPath](const File* file) { return !file->path.compare(userPath); });	// поиск необходимого файла среди открытых
 
-		if (it == end(activeFiles))	// такого открытого файла не найдено
+		if (it == end(activeFiles))	// такой открытый файл не найден
 		{
 			File* file = new File(true);
 			file->is.open(name, ifstream::binary | ifstream::in);
@@ -145,7 +145,7 @@ namespace TestTask
 				}
 				else
 				{
-					bufferSize = filesystem::file_size(f->path) - bufferSize;	// насколько увеличился вес файла
+					bufferSize = filesystem::file_size(f->path) - bufferSize;	// подсчет, насколько увеличился вес файла
 					cout << "ERROR: Only " << bufferSize << " bytes could be read\n";
 					return bufferSize;
 				}
