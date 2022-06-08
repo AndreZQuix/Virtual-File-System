@@ -19,6 +19,7 @@ namespace TestTask
 
 			if (file->is.is_open())
 			{
+				file->path = userPath;
 				activeFiles.push_back(file);
 				return file;
 			}
@@ -104,12 +105,9 @@ namespace TestTask
 		{
 			if (f->isReadOnly)
 			{
-				f->is.seekg(0, f->is.end);
-				size_t fileLength = f->is.tellg();
-				f->is.seekg(0, f->is.beg);
-				cout << "Reading " << fileLength << " characters...\n";
+				cout << "Reading " << len << " characters...\n";
 
-				if (f->is.read(buff, fileLength))
+				if (f->is.read(buff, len))
 				{
 					cout << "All characters were read successfully\n";
 				}
@@ -137,17 +135,24 @@ namespace TestTask
 		{
 			if (!f->isReadOnly)
 			{
-				// запись в файл
-			}
-			else
-			{
-				cout << "ERROR: File is already opened in READONLY mode\n";
+				cout << "Writing " << len << " characters...\n";
+				size_t bufferSize = filesystem::file_size(f->path);
+
+				if (f->os.write(buff, len))
+				{
+					cout << "All characters were read successfully\n";
+					return len;
+				}
+				else
+				{
+					bufferSize = filesystem::file_size(f->path) - bufferSize;	// насколько увеличился вес файла
+					cout << "ERROR: Only " << bufferSize << " could be read\n";
+					return bufferSize;
+				}
 			}
 		}
-		else
-		{
-			cout << "ERROR: File can not be opened\n";
-		}
+
+		cout << "ERROR: File can not be opened in WRITEONLY mode\n";
 		return 0;
 	}
 }
