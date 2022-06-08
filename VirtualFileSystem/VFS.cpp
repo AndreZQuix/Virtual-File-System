@@ -83,7 +83,7 @@ namespace TestTask
 			}
 
 			File* file = new File(false);
-			file->os.open(userPath, ofstream::out);
+			file->os.open(userPath, ofstream::binary | ofstream::out | ofstream::app);
 			if (file->os.is_open())
 			{
 				cout << "File has been created or opened in WRITEONLY mode\n";
@@ -133,6 +133,21 @@ namespace TestTask
 
 	size_t VFS::Write(File* f, char* buff, size_t len)
 	{
+		if (f)
+		{
+			if (!f->isReadOnly)
+			{
+				// запись в файл
+			}
+			else
+			{
+				cout << "ERROR: File is already opened in READONLY mode\n";
+			}
+		}
+		else
+		{
+			cout << "ERROR: File can not be opened\n";
+		}
 		return 0;
 	}
 }
