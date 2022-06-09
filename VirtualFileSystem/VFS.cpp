@@ -24,7 +24,6 @@ namespace TestTask
 				return file;
 			}
 
-			cout << "ERROR: File can not be opened in READONLY mode\n";
 			Close(file);
 		}
 		else if ((*it)->isReadOnly)	// файл уже открыт в readonly
@@ -33,7 +32,7 @@ namespace TestTask
 			return *it;
 		}
 
-		cout << "ERROR: File is already opened in WRITEONLY mode\n";
+		cout << "ERROR: File can not be opened\n";
 		return nullptr;
 	}
 

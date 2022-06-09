@@ -3,19 +3,16 @@
 
 int main()
 {
-    _CrtMemState _ms;       // memory leak
-    _CrtMemCheckpoint(&_ms);
-
     TestTask::IVFS* VFS = new TestTask::VFS();      // тестирование
 
     std::filesystem::path path = std::filesystem::current_path().parent_path();
-    std::cout << path << std::endl;
 
-    std::cout << "\nOpening first file..." << std::endl;
+    std::cout << "Opening first file..." << std::endl;
     std::filesystem::path path1 = path / std::filesystem::path("Test.txt");
     TestTask::File* file1 = VFS->Open(path1.string().c_str());
 
-    std::cout << "\nPath: " << file1->path << std::endl;
+    if(file1)
+        std::cout << "\nPath: " << file1->path << std::endl;
 
     std::cout << "\nCreating second file..." << std::endl;
     std::filesystem::path path2 = path / std::filesystem::path("/TEST") / std::filesystem::path("Test2.txt");
@@ -50,7 +47,6 @@ int main()
     delete[] buff;
     delete VFS;
 
-    _CrtMemDumpAllObjectsSince(&_ms);
     return 0;
 }
 

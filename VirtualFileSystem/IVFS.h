@@ -3,13 +3,6 @@
 #include <iostream>
 #include <filesystem>
 
-#ifdef _DEBUG
-#include <crtdbg.h>
-#define _CRTDBG_MAP_ALLOC
-#endif
-
-#define new new( _NORMAL_BLOCK, __FILE__, __LINE__)
-
 namespace TestTask
 {
 	struct File
