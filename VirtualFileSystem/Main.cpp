@@ -8,38 +8,43 @@ int main()
 
     TestTask::IVFS* VFS = new TestTask::VFS();      // тестирование
 
-    std::cout << "\nOpening first file..." << std::endl;
-    TestTask::File* firstFile = VFS->Open("G:/VS/VirtualFileSystem/Test.txt");
+    std::filesystem::path path = std::filesystem::current_path().parent_path();
+    std::cout << path << std::endl;
 
-    std::cout << "\nPath: " << firstFile->path << std::endl;
+    std::cout << "\nOpening first file..." << std::endl;
+    std::filesystem::path path1 = path / std::filesystem::path("Test.txt");
+    TestTask::File* file1 = VFS->Open(path1.string().c_str());
+
+    std::cout << "\nPath: " << file1->path << std::endl;
 
     std::cout << "\nCreating second file..." << std::endl;
-    TestTask::File* secondFile = VFS->Create("G:/VS/TEST/Test2.txt");
+    std::filesystem::path path2 = path / std::filesystem::path("/TEST") / std::filesystem::path("Test2.txt");
+    TestTask::File* file2 = VFS->Create(path2.string().c_str());
 
     std::cout << "\nOpening second file..." << std::endl;
-    secondFile = VFS->Open("G:/VS/TEST/Test2.txt");
+    file2 = VFS->Open(path1.string().c_str());
 
     std::cout << "\nClosing second file..." << std::endl;
-    VFS->Close(secondFile);
+    VFS->Close(file2);
 
     std::cout << "\nOpening second file..." << std::endl;
-    secondFile = VFS->Open("G:/VS/TEST/Test2.txt");
+    file2 = VFS->Open(path1.string().c_str());
     
     std::cout << "\nReading first file..." << std::endl;
     size_t len = 30;
     char* buff = new char[len];
-    size_t readBytes = VFS->Read(firstFile, buff, len);
+    size_t readBytes = VFS->Read(file1, buff, len);
     std::cout << "\nBytes read: " << readBytes << std::endl;
     std::cout << buff;
 
     std::cout << "\nClosing first file..." << std::endl;
-    VFS->Close(firstFile);
+    VFS->Close(file1);
 
     std::cout << "\nCreating first file..." << std::endl;
-    firstFile = VFS->Create("G:/VS/VirtualFileSystem/Test.txt");
+    file1 = VFS->Create(path1.string().c_str());
 
     std::cout << "\n\nWriting to the first file..." << std::endl;
-    size_t writtenBytes = VFS->Write(firstFile, buff, strlen(buff));
+    size_t writtenBytes = VFS->Write(file1, buff, strlen(buff));
     std::cout << "Bytes written: " << writtenBytes << std::endl;
 
     delete[] buff;

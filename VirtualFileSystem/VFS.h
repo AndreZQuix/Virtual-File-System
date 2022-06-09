@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include "IVFS.h"
-#include <list>
 
 namespace TestTask
 {
