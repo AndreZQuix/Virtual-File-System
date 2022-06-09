@@ -8,7 +8,6 @@ namespace TestTask
 	{
 		filesystem::path userPath = filesystem::path(name);
 		cout << "Trying to open the file in READONLY mode...\n";
-
 		list<File*>::iterator it = find_if(begin(activeFiles), end(activeFiles),
 			[userPath](const File* file) { return !file->path.compare(userPath); });	// поиск необходимого файла среди открытых
 
@@ -24,6 +23,7 @@ namespace TestTask
 				return file;
 			}
 
+			cout << "ERROR: File can not be opened\n";
 			Close(file);
 		}
 		else if ((*it)->isReadOnly)	// файл уже открыт в readonly
@@ -31,8 +31,10 @@ namespace TestTask
 			cout << "File is already opened in READONLY mode\n";
 			return *it;
 		}
-
-		cout << "ERROR: File can not be opened\n";
+		else
+		{
+			cout << "File is already opened in WRITEONLY mode\n";
+		}
 		return nullptr;
 	}
 
