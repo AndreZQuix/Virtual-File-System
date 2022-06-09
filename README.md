@@ -1,4 +1,4 @@
-# VirtualFileSystem
+# Virtual File System
 
 A virtual file system (VFS) is programming that forms an interface between an operating system's kernel and a more concrete file system. The VFS serves as an abstraction layer that gives applications access to different types of file systems and local and network storage devices.
 
