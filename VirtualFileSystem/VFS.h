@@ -5,7 +5,7 @@ namespace TestTask
 {
 	class VFS : public IVFS
 	{
-		std::list<File*> activeFiles;	// кэш открытых файлов
+		std::list<File*> activeFiles;	// opened files storage
 
 	public:
 		File* Open(const char* name) override;

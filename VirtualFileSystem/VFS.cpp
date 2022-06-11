@@ -9,9 +9,9 @@ namespace TestTask
 		filesystem::path userPath = filesystem::path(name);
 		cout << "Trying to open the file in READONLY mode...\n";
 		list<File*>::iterator it = find_if(begin(activeFiles), end(activeFiles),
-			[userPath](const File* file) { return !file->path.compare(userPath); });	// поиск необходимого файла среди открытых
+			[userPath](const File* file) { return !file->path.compare(userPath); });	// searching file with certain name and path among opened files
 
-		if (it == end(activeFiles))	// такой открытый файл не найден
+		if (it == end(activeFiles))	// file isn't found
 		{
 			File* file = new File(true);
 			file->is.open(name, ifstream::binary | ifstream::in);
@@ -26,7 +26,7 @@ namespace TestTask
 			cout << "ERROR: File can not be opened\n";
 			Close(file);
 		}
-		else if ((*it)->isReadOnly)	// файл уже открыт в readonly
+		else if ((*it)->isReadOnly)	// file is already opened
 		{
 			cout << "File is already opened in READONLY mode\n";
 			return *it;
@@ -61,7 +61,7 @@ namespace TestTask
 		list<File*>::iterator it = find_if(begin(activeFiles), end(activeFiles),
 			[userPath](const File* file) { return !file->path.compare(userPath); });
 
-		if (it != end(activeFiles))	// открытый файл найден
+		if (it != end(activeFiles))	// file is found
 		{
 			if ((*it)->isReadOnly)
 			{
@@ -146,7 +146,7 @@ namespace TestTask
 				}
 				else
 				{
-					bufferSize = filesystem::file_size(f->path) - bufferSize;	// подсчет, насколько увеличился вес файла
+					bufferSize = filesystem::file_size(f->path) - bufferSize;	// count how much file size increased
 					cout << "ERROR: Only " << bufferSize << " bytes could be read\n";
 					return bufferSize;
 				}

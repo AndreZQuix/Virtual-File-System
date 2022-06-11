@@ -3,7 +3,7 @@
 
 int main()
 {
-    TestTask::IVFS* VFS = new TestTask::VFS();      // тестирование
+    TestTask::IVFS* VFS = new TestTask::VFS();
 
     std::filesystem::path path = std::filesystem::current_path().parent_path();
 
